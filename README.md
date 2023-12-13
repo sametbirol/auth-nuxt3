@@ -18,8 +18,7 @@ Bu proje, Nuxt 3 kullanarak DummyJSON'a istek atarak giriş yapmayı amaçlamakt
 ![image](https://github.com/sametbirol/auth-nuxt3/assets/75724488/0a73d7a0-e3dc-45d3-9424-3fcd5e4a41b6)
 
 - Proje için gerekli layout ve sayfaları, Tailwind CSS kullanarak yazdım.
-- DummyJSON sitesine auth login isteği atmak için kullanılan Pinia Store örneğini projeme entegre ettim(kopyala yapıştır).
-- [auth.ts](/store/auth.ts): Pinia Store.
+- DummyJSON sitesine auth login isteği atmak için kullanılan [Pinia Store](/store/auth.ts) örneğini projeme entegre ettim(kopyala yapıştır).
 - Default layout'ta kullanıcı giriş yapmışsa logout, yapmamışsa login butonunu koşullu ekledim.
 - Aynı şekilde index sayfasında, ya giriş yapılmadı yazisini ya da kullanıcı verisini gösterdim.
 - Basit bir global middleware oluşturdum, şu an için herhangi bir işlevi yok.
