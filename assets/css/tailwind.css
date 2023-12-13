@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+body {
+  @apply bg-slate-200;
+}
+.router-link-exact-active {
+  @apply text-green-700;
+}
+@layer components {
+  .gradient {
+    background: linear-gradient(to right, #00b09b, #96c93d);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .gradient-div-btn-bg {
+    position: absolute;
+    left :0;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(to right, #96c93d, #00b09b);
+    /* transition: transform 0.5s ease; */
+  }
+  /* .gradient-div-btn-bg:hover {
+    transform: translateX(-50%);
+  } */
+  .loginBtn {
+    @apply bg-green-600 text-white px-3 py-2 rounded-md text-sm text-white;
+  }
+  .login-container {
+    width: 500px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .label-input {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    padding-left: 7px;
+  }
+}
+
+@layer base {
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-xl;
+  }
+  /* ... */
+}
