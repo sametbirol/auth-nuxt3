@@ -3,13 +3,13 @@
         <form class="container bg-white rounded-md p-8 ">
             <h1 class="py-2 pb-16 font-bold text-center">Login</h1>
             <div class="container flex flex-col">
-                <label class="label-input">Username</label>
+                <label class="label-input">Email</label>
                 <div class="flex p-2  gap-2 border-b-2">
                     <img src="@/assets/media/user.svg" class="w-4">
-                    <input class="py-1  focus:outline-none grow" placeholder="Type your username" autocomplete="username"
-                        type="text" v-model="user.username" />
+                    <input class="py-1  focus:outline-none grow" placeholder="Type your email" autocomplete="email"
+                        type="text" v-model="user.email" />
                 </div>
-                <span class="text-red-700">{{ usernameError }}</span>
+                <span class="text-red-700">{{ emailError }}</span>
                 <label class="label-input mt-8">Password</label>
                 <div class="flex p-2 gap-2 border-b-2">
                     <img src="@/assets/media/lock.svg" class="w-4">
@@ -18,11 +18,14 @@
                 </div>
                 <span class="text-red-700">{{ passwordError }}</span>
                 <!-- <div v-for="error in errors" class="text-red-800">{{ error }}</div> -->
-                <span class="text-right label-input pb-8"><a href="#">Forgot password?</a></span>
+                <div class="flex justify-between w-full">
+                    <span class="label-input pb-8"><a href="#">Not signed up before?</a></span>
+                    <span class="label-input pb-8"><a href="#">Forgot password?</a></span>
+                </div>
                 <div class="rounded-full flex justify-center relative overflow-hidden h-12 w-64 mx-auto">
                     <div class="gradient-div-btn-bg -z-1"></div>
                     <button class="z-2 relative text-white font-bold w-full disabled:bg-black" @click.prevent="checkForm"
-                        :disabled="usernameError != '' || passwordError != ''">LOGIN</button>
+                        :disabled="emailError != '' || passwordError != ''">LOGIN</button>
                 </div>
             </div>
         </form>
@@ -32,27 +35,27 @@
 <script setup>
 import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
 import { useAuthStore } from '~/store/auth';
-const { authenticateUser } = useAuthStore(); // use authenticateUser action from  auth store
+const { signInUser } = useAuthStore(); // use authenticateUser action from  auth store
 
-const { authenticated } = storeToRefs(useAuthStore());
+const { firebaseUser } = storeToRefs(useAuthStore());
 
 // My code start
 definePageMeta({
     layout: "login"
 })
 const user = ref({
-    username: '',
+    email: '',
     password: '',
 });
 const userTyped = ref({
-    username: 0,
+    email: 0,
     password: 0,
 })
-const usernameError = computed(() => {
-    if (user.value.username === '' && userTyped.value.username) {
-        return 'Please enter your username.';
+const emailError = computed(() => {
+    if (user.value.email === '' && userTyped.value.email) {
+        return 'Please enter your email.';
     }
-    userTyped.value.username = 1;
+    userTyped.value.email = 1;
     return '';
 });
 const passwordError = computed(() => {
@@ -66,9 +69,15 @@ const passwordError = computed(() => {
 // END
 const router = useRouter();
 const checkForm = async (e) => {
-    await authenticateUser(user.value);
-    if (authenticated) {
-        router.push("/")
+    const response = await signInUser(user.value);
+    if (firebaseUser.value) {
+        router.push("/");
+    }
+    else if ("errorMessage" in response) {
+        alert(response.errorMessage);
+    }
+    else{
+        console.log(response)
     }
 }
 
