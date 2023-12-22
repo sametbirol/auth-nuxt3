@@ -1,7 +1,7 @@
 <template>
     <div class="login-container mx-auto">
         <form class="container bg-white rounded-md p-8 ">
-            <h1 class="py-2 pb-16 font-bold text-center">Login</h1>
+            <h1 class="py-2 pb-16 font-bold text-center">{{ isLogin ? 'Login' : 'Register' }}</h1>
             <div class="container flex flex-col">
                 <label class="label-input">Email</label>
                 <div class="flex p-2  gap-2 border-b-2">
@@ -19,13 +19,16 @@
                 <span class="text-red-700">{{ passwordError }}</span>
                 <!-- <div v-for="error in errors" class="text-red-800">{{ error }}</div> -->
                 <div class="flex justify-between w-full">
-                    <span class="label-input pb-8"><a href="#">Not signed up before?</a></span>
-                    <span class="label-input pb-8"><a href="#">Forgot password?</a></span>
+                    <span class="label-input pb-8"><a href="#" @click.prevent="isLogin = !isLogin">
+                            {{ isLogin ? 'Not signed up before?' : 'Already have an account?' }}</a></span>
+                    <span class="label-input pb-8"><a href="#" @click.prevent="">Forgot password?</a></span>
                 </div>
                 <div class="rounded-full flex justify-center relative overflow-hidden h-12 w-64 mx-auto">
                     <div class="gradient-div-btn-bg -z-1"></div>
                     <button class="z-2 relative text-white font-bold w-full disabled:bg-black" @click.prevent="checkForm"
-                        :disabled="emailError != '' || passwordError != ''">LOGIN</button>
+                        :disabled="emailError != '' || passwordError != ''">
+                        {{ isLogin ? 'LOGIN' : 'REGISTER' }}
+                    </button>
                 </div>
             </div>
         </form>
@@ -35,10 +38,10 @@
 <script setup>
 import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
 import { useAuthStore } from '~/store/auth';
-const { signInUser } = useAuthStore(); // use authenticateUser action from  auth store
+const { signInUser, createUser } = useAuthStore(); // use authenticateUser action from  auth store
 
 const { firebaseUser } = storeToRefs(useAuthStore());
-
+const isLogin = ref(true)
 // My code start
 definePageMeta({
     layout: "login"
@@ -69,14 +72,20 @@ const passwordError = computed(() => {
 // END
 const router = useRouter();
 const checkForm = async (e) => {
-    const response = await signInUser(user.value);
+    let response;
+    if (isLogin.value) {
+        response = await signInUser(user.value);
+    }
+    else {
+        response = await createUser(user.value);
+    }
     if (firebaseUser.value) {
         router.push("/");
     }
     else if ("errorMessage" in response) {
         alert(response.errorMessage);
     }
-    else{
+    else {
         console.log(response)
     }
 }
