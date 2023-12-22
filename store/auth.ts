@@ -20,24 +20,33 @@ export const useAuthStore = defineStore('auth', {
       const auth = getAuth();
       const credentials = await
         createUserWithEmailAndPassword(auth, email, password)
+          .then((res) => {
+            this.firebaseUser = res.user;
+            return res;
+          })
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.log({ errorCode, errorMessage })
+            // console.log({ errorCode, errorMessage })
+            return { errorCode, errorMessage }
           })
+      // console.log(credentials);
       return credentials
     },
     async signInUser({ email, password }: UserPayloadInterface) {
       const auth = getAuth();
       const credentials = await
         signInWithEmailAndPassword(auth, email, password)
+          .then((res) => {
+            this.firebaseUser = res.user;
+            return res;
+          })
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.log({ errorCode, errorMessage });
+            // console.log({ errorCode, errorMessage });
             return { errorCode, errorMessage }
           });
-      this.firebaseUser = auth.currentUser
       return credentials;
     },
     async initUser() {
@@ -70,7 +79,13 @@ export const useAuthStore = defineStore('auth', {
     async signOutUser() {
       const auth = getAuth();
       const result = await auth.signOut();
+      this.firebaseUser = null;
       return result;
+    }
+  },
+  getters:{
+    isAuthenticated(): Boolean{
+      return this.firebaseUser == null;
     }
   }
 });
