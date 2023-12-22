@@ -8,13 +8,13 @@
 <script setup>
 import { onMounted } from 'vue';
 import { useAuthStore } from '~/store/auth';
-const { logUserOut } = useAuthStore(); // use authenticateUser action from  auth store
+const { signOutUser } = useAuthStore(); // use authenticateUser action from  auth store
 
 
 definePageMeta({
     layout: "login"
 })
-const count = ref(5);
+const count = ref(3);
 
 const countdown = setInterval(() => {
     if (count.value <= 0) {
@@ -25,7 +25,7 @@ const countdown = setInterval(() => {
 }, 1000);
 const router = useRouter();
 onMounted(async () => {
-    await logUserOut();
+    await signOutUser();
 })
 watch(count,async (newValue) => {
     if(newValue <= 0) {
