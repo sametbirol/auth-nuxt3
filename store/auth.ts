@@ -85,7 +85,7 @@ export const useAuthStore = defineStore('auth', {
   },
   getters:{
     isAuthenticated(): Boolean{
-      return this.firebaseUser == null;
+      return this.firebaseUser != null;
     }
   }
 });
