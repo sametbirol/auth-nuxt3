@@ -19,9 +19,9 @@
                 <span class="text-red-700">{{ passwordError }}</span>
                 <!-- <div v-for="error in errors" class="text-red-800">{{ error }}</div> -->
                 <div class="flex justify-between w-full">
-                    <span class="label-input pb-8"><a href="#" @click.prevent="isLogin = !isLogin">
+                    <span class="label-input pb-8 hover:underline"><a href="#" @click.prevent="isLogin = !isLogin">
                             {{ isLogin ? 'Not signed up before?' : 'Already have an account?' }}</a></span>
-                    <span class="label-input pb-8"><a href="#" @click.prevent="">Forgot password?</a></span>
+                    <span class="label-input pb-8 hover:underline"><a href="#" @click.prevent="">Forgot password?</a></span>
                 </div>
                 <div class="rounded-full flex justify-center relative overflow-hidden h-12 w-64 mx-auto">
                     <div class="gradient-div-btn-bg -z-1"></div>
