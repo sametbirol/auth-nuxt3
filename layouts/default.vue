@@ -7,10 +7,10 @@
                     <li>
                         <NuxtLink to="/">Home</NuxtLink>
                     </li>
-                    <li>
-                        <NuxtLink to="/about">About</NuxtLink>
+                    <li v-if="isAuthenticated">
+                        <NuxtLink to="/profile">Profile</NuxtLink>
                     </li>
-                    <li v-if="!firebaseUser">
+                    <li v-if="!isAuthenticated">
                         <NuxtLink to="/login" class="loginBtn">Login</NuxtLink>
                     </li>
                     <li v-else>
@@ -28,7 +28,7 @@
 <script setup>
 import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
 import { useAuthStore } from '~/store/auth';
-const { firebaseUser } = storeToRefs(useAuthStore());
+const { isAuthenticated } = storeToRefs(useAuthStore());
 
 </script>
 
