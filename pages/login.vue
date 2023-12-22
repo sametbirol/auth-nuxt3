@@ -1,6 +1,7 @@
 <template>
     <div class="login-container mx-auto">
         <form class="container bg-white rounded-md p-8 ">
+            <AlertSlide v-bind="messageObj" :model-value="modelValue" @close="modelValue = false"></AlertSlide>
             <h1 class="py-2 pb-16 font-bold text-center">{{ isLogin ? 'Login' : 'Register' }}</h1>
             <div class="container flex flex-col">
                 <label class="label-input">Email</label>
@@ -36,12 +37,18 @@
 </template>
 
 <script setup>
+
 import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
 import { useAuthStore } from '~/store/auth';
-const { signInUser, createUser } = useAuthStore(); // use authenticateUser action from  auth store
+const { signInUser, createUser, initUser } = useAuthStore(); // use authenticateUser action from  auth store
 
 const { firebaseUser } = storeToRefs(useAuthStore());
 const isLogin = ref(true)
+const messageObj = ref({
+    error: 'Hellooo',
+    errorColor: 'red',
+})
+const modelValue = ref(false)
 // My code start
 definePageMeta({
     layout: "login"
@@ -80,10 +87,18 @@ const checkForm = async (e) => {
         response = await createUser(user.value);
     }
     if (firebaseUser.value) {
-        router.push("/");
+        modelValue.value = true;
+        messageObj.value.error = (isLogin.value ? 'Login successful' : 'Account created , logging in.');
+        messageObj.value.errorColor = 'green';
+        setTimeout(() => {
+            router.push("/");
+        }, 4000);
     }
     else if ("errorMessage" in response) {
-        alert(response.errorMessage);
+        modelValue.value = true;
+        messageObj.value.error = response.errorMessage;
+        messageObj.value.errorColor = 'red';
+
     }
     else {
         console.log(response)
