@@ -5,6 +5,9 @@
                 <NuxtLink to="/" class="font-bold">Authenticator</NuxtLink>
                 <ul class="flex gap-4 p-0">
                     <li>
+                        <NuxtLink to="/">Home</NuxtLink>
+                    </li>
+                    <li>
                         <NuxtLink to="/about">About</NuxtLink>
                     </li>
                     <li v-if="!firebaseUser">
