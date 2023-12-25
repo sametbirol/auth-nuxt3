@@ -13,16 +13,16 @@ interface UserPayloadInterface {
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    firebaseUser: null as User | null,
+    user: null as User | null,
   }),
   actions: {
     async createUser({ email, password }: UserPayloadInterface) {
       const auth = getAuth();
       const credentials = await
         createUserWithEmailAndPassword(auth, email, password)
-          .then((res) => {
-            this.firebaseUser = res.user;
-            return res;
+          .then((userCredential) => {
+            this.user = userCredential.user;
+            return userCredential;
           })
           .catch((error) => {
             const errorCode = error.code;
@@ -37,9 +37,9 @@ export const useAuthStore = defineStore('auth', {
       const auth = getAuth();
       const credentials = await
         signInWithEmailAndPassword(auth, email, password)
-          .then((res) => {
-            this.firebaseUser = res.user;
-            return res;
+          .then((userCredential) => {
+            this.user = userCredential.user;
+            return userCredential;
           })
           .catch((error) => {
             const errorCode = error.code;
@@ -49,43 +49,31 @@ export const useAuthStore = defineStore('auth', {
           });
       return credentials;
     },
-    async initUser() {
+    initUser() {
       const auth = getAuth();
-      this.firebaseUser = auth.currentUser;
       const userCookie = useCookie("userCookie");
-
       const router = useRouter();
-
       onAuthStateChanged(auth, (user) => {
         if (user) {
-          // User is signed in, see docs for a list of available properties
-          // https://firebase.google.com/docs/reference/js/firebase.User
+          this.user = user;
+          // @ts-ignore
+          userCookie.value = user
         } else {
-          //if signed out
+          userCookie.value = null
           router.push("/");
         }
-
-        this.firebaseUser = user;
-
-        // @ts-ignore
-        userCookie.value = user; //ignore error because nuxt will serialize to json
-
-        // $fetch("/api/auth", {
-        //   method: "POST",
-        //   body: { user },
-        // });
       });
     },
     async signOutUser() {
       const auth = getAuth();
       const result = await auth.signOut();
-      this.firebaseUser = null;
+      this.user = null;
       return result;
     }
   },
-  getters:{
-    isAuthenticated(): Boolean{
-      return this.firebaseUser != null;
+  getters: {
+    isAuthenticated(): Boolean {
+      return this.user != null;
     }
   }
 });

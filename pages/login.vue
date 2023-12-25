@@ -8,14 +8,14 @@
                 <div class="flex p-2  gap-2 border-b-2">
                     <img src="@/assets/media/user.svg" class="w-4">
                     <input class="py-1  focus:outline-none grow" placeholder="Type your email" autocomplete="email"
-                        type="text" v-model="user.email" />
+                        type="text" v-model="userForm.email" />
                 </div>
                 <span class="text-red-700">{{ emailError }}</span>
                 <label class="label-input mt-8">Password</label>
                 <div class="flex p-2 gap-2 border-b-2">
                     <img src="@/assets/media/lock.svg" class="w-4">
                     <input class="py-1  focus:outline-none grow" placeholder="Type your password"
-                        autocomplete="current-password" type="password" v-model="user.password" />
+                        autocomplete="current-password" type="password" v-model="userForm.password" />
                 </div>
                 <span class="text-red-700">{{ passwordError }}</span>
                 <!-- <div v-for="error in errors" class="text-red-800">{{ error }}</div> -->
@@ -37,12 +37,11 @@
 </template>
 
 <script setup>
-
 import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
 import { useAuthStore } from '~/store/auth';
 const { signInUser, createUser, initUser } = useAuthStore(); // use authenticateUser action from  auth store
-
-const { firebaseUser } = storeToRefs(useAuthStore());
+const router = useRouter();
+const { user } = storeToRefs(useAuthStore());
 const isLogin = ref(true)
 const messageObj = ref({
     error: 'Hellooo',
@@ -53,7 +52,7 @@ const modelValue = ref(false)
 definePageMeta({
     layout: "login"
 })
-const user = ref({
+const userForm = ref({
     email: '',
     password: '',
 });
@@ -62,14 +61,14 @@ const userTyped = ref({
     password: 0,
 })
 const emailError = computed(() => {
-    if (user.value.email === '' && userTyped.value.email) {
+    if (userForm.value.email === '' && userTyped.value.email) {
         return 'Please enter your email.';
     }
     userTyped.value.email = 1;
     return '';
 });
 const passwordError = computed(() => {
-    if (user.value.password === '' && userTyped.value.password) {
+    if (userForm.value.password === '' && userTyped.value.password) {
         return 'Please enter your password.';
     }
     userTyped.value.password = 1;
@@ -77,31 +76,27 @@ const passwordError = computed(() => {
 });
 
 // END
-const router = useRouter();
 const checkForm = async (e) => {
     let response;
     if (isLogin.value) {
-        response = await signInUser(user.value);
+        response = await signInUser(userForm.value);
     }
     else {
-        response = await createUser(user.value);
+        response = await createUser(userForm.value);
     }
-    if (firebaseUser.value) {
+    if (user.value) {
         modelValue.value = true;
         messageObj.value.error = (isLogin.value ? 'Login successful' : 'Account created , logging in.');
         messageObj.value.errorColor = 'green';
         setTimeout(() => {
             router.push("/");
-        }, 4000);
+        }, 3000);
     }
     else if ("errorMessage" in response) {
         modelValue.value = true;
         messageObj.value.error = response.errorMessage;
         messageObj.value.errorColor = 'red';
 
-    }
-    else {
-        console.log(response)
     }
 }
 
