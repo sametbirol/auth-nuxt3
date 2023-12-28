@@ -3,7 +3,7 @@ import { getAuth, updateProfile } from "firebase/auth";
 export default function () {
     const uploadPhoto = (photo: File, email: String) => {
         const storage = getStorage();
-        const storageRef = ref(storage, `users/photos/${email}`);
+        const storageRef = ref(storage, `users/photos/${email}.jpg`);
         uploadBytes(storageRef, photo).then((snapshot) => {
             console.log(snapshot)
         }).then(() => {
@@ -15,7 +15,7 @@ export default function () {
     }
     const updatePhotoUrl = (email: String) => {
         const storage = getStorage();
-        const storageRef = ref(storage, `users/photos/${email}`);
+        const storageRef = ref(storage, `users/photos/${email}.jpg`);
         getDownloadURL(storageRef).then(async (url) => {
             updateUserProfile(url);
         }).catch((error) => {
