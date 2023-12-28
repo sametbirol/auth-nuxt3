@@ -36,51 +36,25 @@
                 </div>
                 <!-- Other user-related information or actions -->
             </div>
-            <div class="relative mt-8">
-                <!-- <button @click="showUpdateSection = !showUpdateSection"
-                    class="absolute top-0 right-0 px-2 py-1 bg-blue-500 text-white rounded-md">Edit</button>
-                <div v-if="showUpdateSection"
-                    class="absolute left-1/4 top-20 rounded w-1/2 p-8 bg-red-200 flex flex-col items-center">
-                    <img :src="user.providerData[0].photoURL || 'https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-PNG-Photos.png'"
-                        class="w-48" />
-                    <input type="file" ref="photoUpload" accept="image/png, image/jpeg">
-                    <button @click.prevent="handleUpdate"
-                        class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md">Update</button>
-                </div> -->
-            </div>
         </div>
-        <!-- <div class="absolute left-1/4 rounded w-1/2 h-1/2 p-8 bg-red-200 flex flex-col items-center">
-            <img :src="user.providerData[0].photoURL || 'https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-PNG-Photos.png'"
-                class="w-48" />
-            <input type="file" ref="photoUpload" accept="image/png, image/jpeg">
-            <button @click.prevent="handleUpdate">Update</button>
-            <div class="flex flex-col gap-4">
-                <p>Email: {{ user.providerData[0].email }}</p>
-                <p>Phone: {{ user.providerData[0].phoneNumber | 'empty' }}</p>
-                <p>Name: {{ user.providerData[0].displayName | 'empty' }}</p>
 
-            </div>
-        </div> -->
     </div>
 </template>
 
 <script setup>
-import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
-import { useAuthStore } from '~/store/auth';
-const { user } = storeToRefs(useAuthStore());
-const { uploadPhoto } = usePhotoFirebase();
+
 definePageMeta({
     middleware: 'auth',
 })
-const photoUpload = ref(null)
-const handleUpdate = () => {
-    uploadPhoto(photoUpload.value.files[0], user.value.providerData[0].email);
-}
 const formatDate = (timestamp) => {
-    // Add your date formatting logic here
     return new Date(parseInt(timestamp)).toLocaleString();
 };
+import { storeToRefs } from 'pinia'; 
+import { useAuthStore } from '~/store/auth';
+const { user } = storeToRefs(useAuthStore());
+const { uploadPhoto } = usePhotoFirebase();
 
+const photoUpload = ref(null)
 const previewImage = ref(null);
 const showModal = ref(false);
 const handleFileChange = () => {
@@ -93,6 +67,9 @@ const handleFileChange = () => {
         reader.readAsDataURL(file);
     }
 };
+const handleUpdate = () => {
+    uploadPhoto(photoUpload.value.files[0], user.value.providerData[0].email);
+}
 </script>
 
 <style scoped>
