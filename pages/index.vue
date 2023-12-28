@@ -1,16 +1,16 @@
 <template>
-    <div class="flex gap-4 p-4 flex-wrap justify-between" >
-        <CardProduct v-for="product in products.products" :product="product"> </CardProduct>
-    </div>
+    <NuxtLink to="/product/" class="loginBtn">See Products</NuxtLink>
 </template>
 
 <script setup>
 import { useAuthStore } from '~/store/auth';
+// import { useProductsStore } from '~/store/products';
 const { initUser } = useAuthStore()
-onMounted(() => {
+// const { getProducts } = useProductsStore()
+onMounted(async () => {
     initUser();
+    // await getProducts();
 })
-const { data: products } = await useFetch('https://dummyjson.com/products')
 
 </script>
 
