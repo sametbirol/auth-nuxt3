@@ -1,5 +1,5 @@
 <template>
-    <div class="flex gap-8 p-16 flex-wrap justify-center bg-gray-400 h-full">
+    <div class="flex gap-8 p-16 flex-wrap justify-center h-full">
         <CardProduct v-for="product in products" :product="product"> </CardProduct>
     </div>
 </template>
