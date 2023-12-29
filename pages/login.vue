@@ -39,7 +39,7 @@
 <script setup>
 import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
 import { useAuthStore } from '~/store/auth';
-const { signInUser, createUser, initUser } = useAuthStore(); // use authenticateUser action from  auth store
+const { signInUser, createUser } = useAuthStore(); // use authenticateUser action from  auth store
 const router = useRouter();
 const { user } = storeToRefs(useAuthStore());
 const isLogin = ref(true)

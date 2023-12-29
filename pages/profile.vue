@@ -74,14 +74,6 @@ const handleFileChange = () => {
 const handleUpdate = () => {
     uploadPhoto(photoUpload.value.files[0], user.value.uid);
 }
-
-// import { useProductsStore } from '~/store/products';
-const { initUser } = useAuthStore()
-// const { getProducts } = useProductsStore()
-onBeforeMount(async () => {
-    initUser();
-    // await getProducts();
-})
 </script>
 
 <style scoped>

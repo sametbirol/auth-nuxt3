@@ -29,6 +29,10 @@
 import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
 import { useAuthStore } from '~/store/auth';
 const { isAuthenticated } = storeToRefs(useAuthStore());
+const { initUser } = useAuthStore()
+onBeforeMount(async () => {
+    initUser();
+})
 
 </script>
 
